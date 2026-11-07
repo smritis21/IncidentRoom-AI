@@ -1,8 +1,12 @@
 # IncidentRoom AI
 
-A small, human-led incident desk for a broken checkout. A team can use four coding agents in a Switch room to triage, investigate, propose a repair and verify it. A reproducible local fixture and approval gate make the demonstration concrete.
+A small, human-led incident desk for a broken checkout. **See the signal. Review the fix. Verify the outcome.** A team can use four coding agents in a Switch room to triage, investigate, propose a repair and verify it. A reproducible local fixture and approval gate make the demonstration concrete.
 
 **Status:** The local workflow is deterministic, uses no model, and is independently runnable. The Switch room setup below is a documented integration using Switch Console's managed coding agents; it has **not been connected or tested in a live Switch installation here**. The role scripts do not themselves speak the Switch protocol. Do not present their local transcript as a real agent conversation. A real Switch room, provider credentials and a recorded chat demo are still required for the hackathon.
+
+## Dashboard
+
+Run `python dashboard_server.py` and open http://127.0.0.1:8080. The dashboard reads the local incident state and refreshes every three seconds. Start triage and approve changes in the terminal, as described below. The dashboard is read-only and binds to localhost. Its activity is the deterministic local workflow, not a transcript of a Switch room.
 
 ## The incident
 
@@ -41,6 +45,7 @@ Switch provides the room, chat bridge and agent runtime. This project supplies t
 
 ## Files
 
+- `dashboard_server.py`, `dashboard/`: read-only local incident dashboard.
 - `checkout.py`, `logs/incident.log`: intentionally broken sample and synthetic incident evidence.
 - `incident.py`: deterministic triage, exact-file approval and verification, with local JSON event record.
 - `tests/`: regression and approval gate tests.
