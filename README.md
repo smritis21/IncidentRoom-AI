@@ -1,3 +1,5 @@
+![IncidentRoom AI banner](assets/banner.svg)
+
 # IncidentRoom AI
 
 A small, human-led incident desk for a broken checkout. **See the signal. Review the fix. Verify the outcome.** A team can use four coding agents in a Switch room to triage, investigate, propose a repair and verify it. A reproducible local fixture and approval gate make the demonstration concrete.
@@ -6,13 +8,13 @@ A small, human-led incident desk for a broken checkout. **See the signal. Review
 
 ## Dashboard
 
-Run `python dashboard_server.py` and open http://127.0.0.1:8080. The dashboard reads the local incident state and refreshes every three seconds. Start triage and approve changes in the terminal, as described below. The dashboard is read-only and binds to localhost. Its activity is the deterministic local workflow, not a transcript of a Switch room.
+Run `python dashboard_server.py` and open http://127.0.0.1:8080. Select **Start triage**, review the proposed change and its hash, then select **Approve fix & run tests**. The dashboard binds to localhost and refreshes every three seconds. Approval changes the disposable checkout fixture and runs tests. Afterward, select **Reset demo** to restore the exact original fixture and clear its local activity for another run. Reset refuses to overwrite a modified fixture. Its activity is the deterministic local workflow, not a transcript of a Switch room. A browser session token and origin check restrict local requests, but the app is not a production security boundary.
 
 ## The incident
 
 `checkout.py` deliberately calls `upper()` on an optional coupon. Requests without a coupon return HTTP 500. `logs/incident.log` is synthetic sample evidence. The proposed one-line fix handles a missing coupon; the verifier runs regression tests. The sample is local only and never deploys anything.
 
-## Quick start (Python 3.9+, no dependencies)
+## Optional terminal workflow (Python 3.9+, no dependencies)
 
 From this folder, in PowerShell or a terminal:
 
@@ -28,7 +30,7 @@ python incident.py approve <full-sha256>
 python incident.py status
 ```
 
-The gate checks the original source and proposed file hashes before writing; a stale source or incorrect hash fails closed. It then runs the regression suite and reports verification failure if tests fail. Approval is a **local command by whoever has filesystem access**, not authenticated Switch identity or a production security boundary. There is no deployment or automatic rollback. State is in ignored `.incident-state.json`; it is a local audit aid, not tamper-proof. The sample fix is deliberately specific to this fixture; this is not a general incident diagnosis system. Do not run it on production code.
+You can use the dashboard buttons instead of these commands. The gate checks the original source and proposed file hashes before writing; a stale source or incorrect hash fails closed. It then runs the regression suite and reports verification failure if tests fail. Approval is a **local action by whoever has access to the dashboard or filesystem**, not authenticated Switch identity or a production security boundary. There is no deployment or automatic rollback. State is in ignored `.incident-state.json`; it is a local audit aid, not tamper-proof. The sample fix is deliberately specific to this fixture; this is not a general incident diagnosis system. Do not run it on production code.
 
 To see the actual HTTP failure before approval, start `python checkout.py` in a second terminal and send a POST to `http://127.0.0.1:8081/checkout` with JSON `{"cents":1000}`. Repeat after repair; the result becomes `{"total_cents": 1000}`. Stop the server and restart it after editing, because Python loaded the old code into memory.
 
@@ -45,7 +47,7 @@ Switch provides the room, chat bridge and agent runtime. This project supplies t
 
 ## Files
 
-- `dashboard_server.py`, `dashboard/`: read-only local incident dashboard.
+- `dashboard_server.py`, `dashboard/`: local incident dashboard with triage and approval buttons.
 - `checkout.py`, `logs/incident.log`: intentionally broken sample and synthetic incident evidence.
 - `incident.py`: deterministic triage, exact-file approval and verification, with local JSON event record.
 - `tests/`: regression and approval gate tests.
