@@ -1,0 +1,4 @@
+2026-11-07T10:01:03Z ERROR checkout request_id=demo-101 status=500 coupon=null
+AttributeError: 'NoneType' object has no attribute 'upper'
+2026-11-07T10:01:04Z INFO checkout request_id=demo-102 status=200 coupon=SAVE10
+2026-11-07T10:01:05Z ERROR checkout request_id=demo-103 status=500 coupon=null
